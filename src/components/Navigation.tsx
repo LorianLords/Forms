@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 const Navigation = () => {
   return (
     <div
-      className={'w-132 flex items-center justify-between p-6 font-sans text-orange-500'}
+      className={
+        'w-132 mb-4 flex items-center justify-between p-6 font-inter text-orange-500'
+      }
     >
       <Link className={'link'} to={'/'}>
         Home

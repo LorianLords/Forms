@@ -7,5 +7,11 @@ export type FormData = {
   sex: 'male' | 'female' | 'other';
   agreeToTerms: boolean;
   picture: FileList;
-  country: string;
+  country: countryType;
 };
+
+export interface countryType {
+  value: string;
+  label: string;
+  code: string;
+}

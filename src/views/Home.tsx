@@ -13,7 +13,7 @@ const Home = () => {
             <p>{data.age}</p>
             <p>{data.email}</p>
             <p>{data.sex}</p>
-            <p>{data.country}</p>
+            <p>{data.country.label}</p>
           </div>
         )}
       </div>
