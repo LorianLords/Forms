@@ -82,19 +82,23 @@ const ConForm = () => {
   }, [password, trigger]);
 
   return (
-    <div>
+    <div
+      className={
+        'mx-auto mb-4 max-w-md rounded-lg p-6 text-2xl shadow-lg sm:bg-red-300 md:bg-blue-300 lg:bg-gray-300'
+      }
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className={'p-6'}>
           <label htmlFor="name"> Name:</label>
           <input type="text" id={'name'} {...register('name')} />
           {errors.name && <span>{errors.name.message}</span>}
         </div>
-        <div>
+        <div className={'p-6 font-semibold'}>
           <label htmlFor="age"> Age:</label>
           <input type="number" id={'age'} {...register('age')} />
           {errors.age && <span>{errors.age.message}</span>}
         </div>
-        <div>
+        <div className={'p-6'}>
           <label htmlFor="email"> Email:</label>
           <input
             type="email"
@@ -104,7 +108,7 @@ const ConForm = () => {
           />
           {errors.email && <span>{errors.email.message}</span>}
         </div>
-        <div>
+        <div className={'p-6'}>
           <label htmlFor="password"> Password:</label>
           <input type="password" id={'password'} {...register('password')} />
           <input
@@ -115,7 +119,7 @@ const ConForm = () => {
           {errors.password && <span>{errors.password.message}</span>}
           {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
         </div>
-        <div>
+        <div className={'p-6'}>
           <div>
             <label htmlFor="male">
               <input
@@ -141,14 +145,14 @@ const ConForm = () => {
             </label>
           </div>
         </div>
-        <div>
+        <div className={'p-3'}>
           <label htmlFor="agreeToTerms">
             <input type="checkbox" id={'agreeToTerms'} {...register('agreeToTerms')} />I
             agree to the Terms and Conditions
           </label>
           {errors.agreeToTerms && <span>{errors.agreeToTerms.message}</span>}
         </div>
-        <div>
+        <div className={'p-3'}>
           <label htmlFor="uploadPicture">Upload picture: </label>
           <Controller
             name={'picture'}
@@ -167,7 +171,7 @@ const ConForm = () => {
           />
           {errors.picture && <span>{errors.picture.message}</span>}
         </div>
-        <div>
+        <div className={'p-6'}>
           <label htmlFor="country">Select Country:</label>
           <Controller
             name={'country'}

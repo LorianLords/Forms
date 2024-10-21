@@ -5,15 +5,13 @@
     "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier-plugin-tailwindcss"
+    "plugin:prettier/recommended"
   ],
   "plugins": [
     "react",
     "@typescript-eslint",
     "react-hooks",
-    "prettier",
-    "prettier-plugin-tailwindcss"
+    "prettier"
   ],
   "parserOptions": {
     "ecmaVersion": 2021,
