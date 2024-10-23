@@ -9,6 +9,7 @@ import { setData } from '../store/formSlice.ts';
 import Select from 'react-select';
 import CountryFlag from 'react-country-flag';
 import log from 'eslint-plugin-react/lib/util/log';
+import { FiUpload } from 'react-icons/fi';
 
 const countryList: countryType[] = [
   { value: 'US', label: 'United States', code: 'US' },
@@ -46,7 +47,6 @@ const validationSchema = Yup.object().shape({
       /[@$!%*?&#]/.test(value),
     ),
   confirmPassword: Yup.string()
-    .min(6, 'Password must contain at least 6 characters long')
     .required('Confirm password is required')
     .oneOf([Yup.ref('password')], 'Passwords must match'),
   sex: Yup.string()
@@ -56,7 +56,6 @@ const validationSchema = Yup.object().shape({
     .oneOf([true], 'You must accept the terms and conditions')
     .required('You must agree to the terms'),
   picture: Yup.mixed<FileList>()
-    .required('Picture is required')
     .test('FileSize', 'The file is too large', (value) => {
       const files = value as FileList;
       return files && files.length > 0 && files[0].size <= 2 * 1024 * 1024; // Ограничение на размер файла 5MB
@@ -84,7 +83,7 @@ const ConForm = () => {
     trigger,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: yupResolver(validationSchema),
     mode: 'onChange',
@@ -120,20 +119,22 @@ const ConForm = () => {
   return (
     <div
       className={
-        'mx-auto mb-4 w-[600px] rounded-lg p-10 px-14 font-roboto text-2xl shadow-lg sm:bg-red-300 md:bg-blue-300 lg:bg-white'
+        'mx-auto mb-4 w-[600px] rounded-lg border border-gray-200 p-10 px-14 font-roboto text-2xl shadow-2xl sm:bg-red-300 md:bg-blue-300 lg:bg-white'
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={'inputBlock'}>
           <label className={'inputLabel'} htmlFor="name">
-            Name
+            Name*
           </label>
           <input type="text" id={'name'} {...register('name')} className={'input'} />
-          {errors.name && <span>{errors.name.message}</span>}
+          <div className={'min-h-[32px]'}>
+            {errors.name && <span className={'error'}>{errors.name.message}</span>}
+          </div>
         </div>
         <div className={'inputBlock'}>
           <label className={'inputLabel'} htmlFor="age">
-            Age
+            Age*
           </label>
           <input
             type="number"
@@ -143,12 +144,13 @@ const ConForm = () => {
             min="5"
             max="120"
           />
-          {errors.age && <span>{errors.age.message}</span>}
+          <div className={'min-h-[32px]'}>
+            {errors.age && <span className={'error'}>{errors.age.message}</span>}
+          </div>
         </div>
         <div className={'inputBlock'}>
           <label className={'inputLabel'} htmlFor="email">
-            {' '}
-            Email
+            Email*
           </label>
           <input
             type="email"
@@ -157,11 +159,14 @@ const ConForm = () => {
             {...register('email')}
             className={'input'}
           />
-          {errors.email && <span>{errors.email.message}</span>}
+          <div className={'min-h-[32px]'}>
+            {errors.email && <span className={'error'}>{errors.email.message}</span>}
+          </div>
         </div>
+
         <div className={'inputBlock'}>
           <label className={'inputLabel'} htmlFor="password">
-            Password
+            Password*
           </label>
           <input
             type="password"
@@ -174,15 +179,23 @@ const ConForm = () => {
             type="password"
             id={'confirm_password'}
             {...register('confirmPassword')}
-            className={'input'}
+            className={'input mt-2'}
             placeholder={'Confirm Password'}
           />
-          {errors.password && <span>{errors.password.message}</span>}
-          {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
+          <div className={'flex min-h-[50px] flex-col items-start'}>
+            {errors.password && (
+              <span className={'error'}>{errors.password.message}</span>
+            )}
+
+            {errors.confirmPassword && (
+              <span className={'error'}>{errors.confirmPassword.message}</span>
+            )}
+          </div>
         </div>
+
         <div className={'flex flex-col'}>
-          <label className={'inputLabel mx-4 text-left'} htmlFor="country">
-            Select Country
+          <label className={'inputLabel mx-3 text-left'} htmlFor="country">
+            Select Country*
           </label>
           <Controller
             name={'country'}
@@ -209,14 +222,15 @@ const ConForm = () => {
                 )}
                 placeholder={'Select Country...'}
                 classNamePrefix={'react-select'}
-                className={'m-2 mb-4 pl-2'}
+                className={'m-1 mb-4 pl-4 pr-1'}
                 isClearable
               />
             )}
           />
           {errors.country && <span>{errors.country.message}</span>}
         </div>
-        <div className={'m-4 my-2 flex flex-col items-start space-y-4'}>
+
+        <div className={'m-4 my-3 flex flex-col items-start space-y-2'}>
           <label className={'inline-flex cursor-pointer items-center'} htmlFor="male">
             <input
               className={'peer hidden'}
@@ -251,36 +265,96 @@ const ConForm = () => {
             <span className="ml-2 text-gray-700">Other</span>
           </label>
         </div>
-        <div className={'inputBlock'}>
-          <label className={'inputLabel'} htmlFor="agreeToTerms">
-            <input type="checkbox" id={'agreeToTerms'} {...register('agreeToTerms')} />I
-            agree to the Terms and Conditions
-          </label>
-          {errors.agreeToTerms && <span>{errors.agreeToTerms.message}</span>}
-        </div>
-        <div className={'p-3'}>
-          <label htmlFor="uploadPicture">Upload picture: </label>
+
+        <div className={'inputBlock items-center'}>
           <Controller
             name={'picture'}
             control={control}
             render={({ field }) => (
-              <input
-                type="file"
-                id={'picture'}
-                accept={'image/jpeg, image/png'}
-                onChange={(e) => {
-                  field.onChange(e.target.files);
-                  field.ref(e.target);
-                }}
-              />
+              <>
+                <input
+                  type="file"
+                  id={'picture'}
+                  accept={'image/jpeg, image/png'}
+                  onChange={(e) => {
+                    field.onChange(e.target.files);
+                    field.ref(e.target);
+                  }}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="picture"
+                  className="flex h-32 w-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-blue-500 focus:border-blue-500"
+                >
+                  <FiUpload className="mb-2 text-3xl text-gray-500" />
+                  {field.value && field.value.length > 0 ? (
+                    <span className="text-gray-700">{field.value[0].name}</span>
+                  ) : (
+                    <>
+                      <span className="text-gray-700">Click to upload photo</span>
+                      <span className="text-sm text-gray-500">JPEG or PNG, max 2MB</span>
+                    </>
+                  )}
+                </label>
+              </>
             )}
           />
-          {errors.picture && <span>{errors.picture.message}</span>}
+          <div className={'min-h-[24px]'}>
+            {errors.picture && <span className={'error'}>{errors.picture.message}</span>}
+          </div>
+        </div>
+
+        <div className={'mx-2 mb-2 mt-2 items-center space-x-2'}>
+          <label
+            className={
+              'flex cursor-pointer items-center font-inter text-2xl font-normal text-gray-800'
+            }
+            htmlFor="agreeToTerms"
+          >
+            <input
+              type="checkbox"
+              id={'agreeToTerms'}
+              className={'peer hidden'}
+              {...register('agreeToTerms')}
+            />
+            <div
+              className={
+                'ml-6 mr-3 h-5 w-5 cursor-pointer rounded border-2 border-gray-300 bg-white peer-checked:border-transparent' +
+                ' peer-checked:bg-blue-600 peer-focus:ring-2 peer-focus:ring-blue-500'
+              }
+            >
+              <svg
+                className="h-4 w-4 text-white peer-checked:block"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            I agree to the Terms and Conditions
+          </label>
+          <div className={'flex min-h-[24px] items-center justify-center text-base'}>
+            {errors.agreeToTerms && (
+              <span className={'error'}>{errors.agreeToTerms.message}</span>
+            )}
+          </div>
         </div>
 
         <button
-          className="rounded-lg bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`rounded-lg px-4 py-4 font-bold focus:outline-none focus:ring-2 ${
+            !Object.keys(errors).length
+              ? 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500'
+              : 'cursor-not-allowed bg-gray-400 text-gray-300'
+          }`}
           type="submit"
+          disabled={!isValid}
         >
           Зарегистрироваться
         </button>

@@ -6,7 +6,7 @@ export type FormData = {
   confirmPassword: string;
   sex: 'male' | 'female' | 'other';
   agreeToTerms: boolean;
-  picture: FileList;
+  picture?: FileList;
   country: countryType;
 };
 
