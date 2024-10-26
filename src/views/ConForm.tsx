@@ -1,28 +1,19 @@
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks.ts';
-import { country_List } from '../Types/consts.ts';
 import { countryType, FormData } from '../Types/types.ts';
 import { setData } from '../store/formSlice.ts';
-import Select from 'react-select';
-import CountryFlag from 'react-country-flag';
-import log from 'eslint-plugin-react/lib/util/log';
 import { FiUpload } from 'react-icons/fi';
-
-const countryList: countryType[] = [
-  { value: 'US', label: 'United States', code: 'US' },
-  { value: 'GB', label: 'United Kingdom', code: 'GB' },
-  { value: 'FR', label: 'France', code: 'FR' },
-  { value: 'DE', label: 'Germany', code: 'DE' },
-  // Добавьте остальные страны по необходимости
-];
+import InputField from '../components/formComponents/InputField.tsx';
+import PasswordField from '../components/formComponents/PasswordField.tsx';
+import SelectCountry from '../components/formComponents/SelectCountry.tsx';
+import GenderRadio from '../components/formComponents/GenderRadio.tsx';
+import FileInput from '../components/formComponents/FileInput.tsx';
+import CheckboxTerm from '../components/formComponents/CheckboxTerm.tsx';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required('Name is required')
-    .min(3, 'Name must be at least 3 characters long'),
+  name: Yup.string().required('Name is required').min(3, 'Name must be at least 3 characters long'),
   age: Yup.number()
     .transform((value, originalValue) => {
       return originalValue.trim() === '' ? null : value;
@@ -34,15 +25,9 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, 'Password must be at least 6 characters long')
     .required('Password is required')
-    .test('hasNumber', 'Password must contain at least 1 number', (value) =>
-      /[0-9]/.test(value),
-    )
-    .test('hasUpperCase', 'Password must contain at least 1 capital letter', (value) =>
-      /[A-Z]/.test(value),
-    )
-    .test('hasLowerCase', 'Password must contain at least 1 lowercase letter', (value) =>
-      /[a-z]/.test(value),
-    )
+    .test('hasNumber', 'Password must contain at least 1 number', (value) => /[0-9]/.test(value))
+    .test('hasUpperCase', 'Password must contain at least 1 capital letter', (value) => /[A-Z]/.test(value))
+    .test('hasLowerCase', 'Password must contain at least 1 lowercase letter', (value) => /[a-z]/.test(value))
     .test('hasSpecialChar', 'Password must contain at least 1 special Char', (value) =>
       /[@$!%*?&#]/.test(value),
     ),
@@ -57,14 +42,20 @@ const validationSchema = Yup.object().shape({
     .required('You must agree to the terms'),
   picture: Yup.mixed<FileList>()
     .test('FileSize', 'The file is too large', (value) => {
-      const files = value as FileList;
-      return files && files.length > 0 && files[0].size <= 2 * 1024 * 1024; // Ограничение на размер файла 5MB
+      console.log(value as FileList);
+      if (value) {
+        const files = value as FileList;
+        return files && files.length > 0 && files[0].size <= 2 * 1024 * 1024; // Ограничение на размер файла 5MB
+      }
+      return true;
     })
     .test('FileType', 'File must be Jpeg or PNG format', (value) => {
-      const files = value as FileList;
-      return (
-        files && files.length > 0 && ['image/jpeg', 'image/png'].includes(files[0].type)
-      );
+      console.log(value as FileList);
+      if (value) {
+        const files = value as FileList;
+        return files && files.length > 0 && ['image/jpeg', 'image/png'].includes(files[0].type);
+      }
+      return true;
     }),
   country: Yup.object()
     .shape({
@@ -91,12 +82,6 @@ const ConForm = () => {
       sex: 'male',
     },
   });
-  const [IsChanged, setIsChanged] = useState(false);
-  const [inputValue, setInputValue] = useState(''); // Состояние для inputValue
-
-  const onInputChange = (newValue: string) => {
-    setInputValue(newValue);
-  };
 
   const dispatch = useAppDispatch();
   const onSubmit = (data: FormData) => {
@@ -107,14 +92,6 @@ const ConForm = () => {
   };
 
   const password = watch('password'); // Следим за полем password
-  const { countries } = useAppSelector((state) => state.forms);
-  useEffect(() => {
-    if (IsChanged) {
-      trigger('confirmPassword').then(() => {
-        // Действия после успешной валидации
-      });
-    }
-  }, [password, trigger]);
 
   return (
     <div
@@ -123,75 +100,40 @@ const ConForm = () => {
       }
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={'inputBlock'}>
-          <label className={'inputLabel'} htmlFor="name">
-            Name*
-          </label>
-          <input type="text" id={'name'} {...register('name')} className={'input'} />
-          <div className={'min-h-[32px]'}>
-            {errors.name && <span className={'error'}>{errors.name.message}</span>}
-          </div>
-        </div>
-        <div className={'inputBlock'}>
-          <label className={'inputLabel'} htmlFor="age">
-            Age*
-          </label>
-          <input
-            type="number"
-            id={'age'}
-            {...register('age')}
-            className={'input'}
-            min="5"
-            max="120"
-          />
-          <div className={'min-h-[32px]'}>
-            {errors.age && <span className={'error'}>{errors.age.message}</span>}
-          </div>
-        </div>
-        <div className={'inputBlock'}>
-          <label className={'inputLabel'} htmlFor="email">
-            Email*
-          </label>
-          <input
-            type="email"
-            id={'email'}
-            placeholder={'example@gmail.com'}
-            {...register('email')}
-            className={'input'}
-          />
-          <div className={'min-h-[32px]'}>
-            {errors.email && <span className={'error'}>{errors.email.message}</span>}
-          </div>
-        </div>
+        <InputField
+          label={'Name*'}
+          fieldId={'name'}
+          fieldType={'text'}
+          registerReturn={register('name')}
+          error={errors.name}
+        />
+        <InputField
+          label={'Age*'}
+          fieldId={'age'}
+          fieldType={'number'}
+          registerReturn={register('age')}
+          error={errors.age}
+          min={'5'}
+          max={'120'}
+        />
 
-        <div className={'inputBlock'}>
-          <label className={'inputLabel'} htmlFor="password">
-            Password*
-          </label>
-          <input
-            type="password"
-            id={'password'}
-            {...register('password')}
-            className={'input'}
-            onBlur={() => setIsChanged(true)}
-          />
-          <input
-            type="password"
-            id={'confirm_password'}
-            {...register('confirmPassword')}
-            className={'input mt-2'}
-            placeholder={'Confirm Password'}
-          />
-          <div className={'flex min-h-[50px] flex-col items-start'}>
-            {errors.password && (
-              <span className={'error'}>{errors.password.message}</span>
-            )}
+        <InputField
+          label={'Email*'}
+          fieldId={'email'}
+          fieldType={'email'}
+          registerReturn={register('email')}
+          placeholder={'example@gmail.com'}
+          error={errors.email}
+        />
 
-            {errors.confirmPassword && (
-              <span className={'error'}>{errors.confirmPassword.message}</span>
-            )}
-          </div>
-        </div>
+        <PasswordField
+          password={password}
+          triggerReturn={() => trigger('confirmPassword')}
+          errorPassword={errors.password}
+          errorConfirmPass={errors.confirmPassword}
+          registerReturnPass={register('password')}
+          registerReturnConf={register('confirmPassword')}
+        />
 
         <div className={'flex flex-col'}>
           <label className={'inputLabel mx-3 text-left'} htmlFor="country">
@@ -200,70 +142,17 @@ const ConForm = () => {
           <Controller
             name={'country'}
             control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                value={field.value || null} // Передаем объект countryType или null, если ничего не выбрано
-                onChange={(selectedOption) => field.onChange(selectedOption)} // Передаем объект в onChange
-                options={countryList}
-                inputValue={inputValue} // Передаем inputValue
-                onInputChange={onInputChange} // Передаем обработчик
-                onMenuOpen={() => console.log('menu open')} // Обработчик открытия меню
-                onMenuClose={() => console.log('menu close')}
-                formatOptionLabel={(country: countryType) => (
-                  <div className={'flex items-center space-x-2'}>
-                    <CountryFlag
-                      countryCode={country.code}
-                      svg
-                      style={{ width: '20px', height: '20px' }}
-                    />
-                    <span>{country.label}</span>
-                  </div>
-                )}
-                placeholder={'Select Country...'}
-                classNamePrefix={'react-select'}
-                className={'m-1 mb-4 pl-4 pr-1'}
-                isClearable
-              />
-            )}
+            render={({ field }) => <SelectCountry {...field} />}
           />
-          {errors.country && <span>{errors.country.message}</span>}
+          <div className={'flex items-start pl-5'}>
+            {errors.country && <span className={'error'}>{errors.country.message}</span>}
+          </div>
         </div>
 
         <div className={'m-4 my-3 flex flex-col items-start space-y-2'}>
-          <label className={'inline-flex cursor-pointer items-center'} htmlFor="male">
-            <input
-              className={'peer hidden'}
-              type="radio"
-              value={'male'}
-              id={'male'}
-              {...register('sex', { required: true })}
-            />
-            <div className="h-5 w-5 rounded-full border border-gray-300 bg-white peer-checked:border-transparent peer-checked:bg-blue-600 peer-focus:ring-2 peer-focus:ring-blue-500"></div>
-            <span className="ml-2 text-gray-700">Male</span>
-          </label>
-          <label className={'inline-flex cursor-pointer items-center'} htmlFor="female">
-            <input
-              className={'peer hidden'}
-              type="radio"
-              value={'female'}
-              id={'female'}
-              {...register('sex')}
-            />
-            <div className="h-5 w-5 rounded-full border border-gray-300 bg-white peer-checked:border-transparent peer-checked:bg-blue-600 peer-focus:ring-2 peer-focus:ring-blue-500"></div>
-            <span className="ml-2 text-gray-700">Female</span>
-          </label>
-          <label className={'inline-flex cursor-pointer items-center'} htmlFor="other">
-            <input
-              className={'peer hidden'}
-              type="radio"
-              value={'other'}
-              id={'other'}
-              {...register('sex')}
-            />
-            <div className="h-5 w-5 rounded-full border border-gray-300 bg-white peer-checked:border-transparent peer-checked:bg-blue-600 peer-focus:ring-2 peer-focus:ring-blue-500"></div>
-            <span className="ml-2 text-gray-700">Other</span>
-          </label>
+          <GenderRadio id={'male'} value={'Male'} registerReturn={register('sex', { required: true })} />
+          <GenderRadio id={'female'} value={'Female'} registerReturn={register('sex')} />
+          <GenderRadio id={'other'} value={'Other'} registerReturn={register('sex')} />
         </div>
 
         <div className={'inputBlock items-center'}>
@@ -271,32 +160,12 @@ const ConForm = () => {
             name={'picture'}
             control={control}
             render={({ field }) => (
-              <>
-                <input
-                  type="file"
-                  id={'picture'}
-                  accept={'image/jpeg, image/png'}
-                  onChange={(e) => {
-                    field.onChange(e.target.files);
-                    field.ref(e.target);
-                  }}
-                  className="hidden"
-                />
-                <label
-                  htmlFor="picture"
-                  className="flex h-32 w-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-blue-500 focus:border-blue-500"
-                >
-                  <FiUpload className="mb-2 text-3xl text-gray-500" />
-                  {field.value && field.value.length > 0 ? (
-                    <span className="text-gray-700">{field.value[0].name}</span>
-                  ) : (
-                    <>
-                      <span className="text-gray-700">Click to upload photo</span>
-                      <span className="text-sm text-gray-500">JPEG or PNG, max 2MB</span>
-                    </>
-                  )}
-                </label>
-              </>
+              <FileInput
+                value={field.value} // Текущее значение файла
+                onChange={field.onChange} // Обработчик изменения файла
+                onBlur={field.onBlur} // Обработчик потери фокуса
+                ref={field.ref} // Ссылка на элемент
+              />
             )}
           />
           <div className={'min-h-[24px]'}>
@@ -304,48 +173,7 @@ const ConForm = () => {
           </div>
         </div>
 
-        <div className={'mx-2 mb-2 mt-2 items-center space-x-2'}>
-          <label
-            className={
-              'flex cursor-pointer items-center font-inter text-2xl font-normal text-gray-800'
-            }
-            htmlFor="agreeToTerms"
-          >
-            <input
-              type="checkbox"
-              id={'agreeToTerms'}
-              className={'peer hidden'}
-              {...register('agreeToTerms')}
-            />
-            <div
-              className={
-                'ml-6 mr-3 h-5 w-5 cursor-pointer rounded border-2 border-gray-300 bg-white peer-checked:border-transparent' +
-                ' peer-checked:bg-blue-600 peer-focus:ring-2 peer-focus:ring-blue-500'
-              }
-            >
-              <svg
-                className="h-4 w-4 text-white peer-checked:block"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
-            </div>
-            I agree to the Terms and Conditions
-          </label>
-          <div className={'flex min-h-[24px] items-center justify-center text-base'}>
-            {errors.agreeToTerms && (
-              <span className={'error'}>{errors.agreeToTerms.message}</span>
-            )}
-          </div>
-        </div>
+        <CheckboxTerm registerReturn={register('agreeToTerms')} error={errors.agreeToTerms} />
 
         <button
           className={`rounded-lg px-4 py-4 font-bold focus:outline-none focus:ring-2 ${
@@ -354,7 +182,6 @@ const ConForm = () => {
               : 'cursor-not-allowed bg-gray-400 text-gray-300'
           }`}
           type="submit"
-          disabled={!isValid}
         >
           Зарегистрироваться
         </button>
