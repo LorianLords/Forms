@@ -25,14 +25,14 @@ const validationSchema = Yup.object().shape({
     .required('Age is required'),
   email: Yup.string().email('Enter email address').required('Email is required'),
   password: Yup.string()
-    .min(1, 'Password must be at least 6 characters long')
-    .required('Password is required'),
-  /* .test('hasNumber', 'Password must contain at least 1 number', (value) => /[0-9]/.test(value))
+    .min(6, 'Password must be at least 6 characters long')
+    .required('Password is required')
+    .test('hasNumber', 'Password must contain at least 1 number', (value) => /[0-9]/.test(value))
     .test('hasUpperCase', 'Password must contain at least 1 capital letter', (value) => /[A-Z]/.test(value))
     .test('hasLowerCase', 'Password must contain at least 1 lowercase letter', (value) => /[a-z]/.test(value))
     .test('hasSpecialChar', 'Password must contain at least 1 special Char', (value) =>
       /[@$!%*?&#]/.test(value),
-    ),*/
+    ),
   confirmPassword: Yup.string()
     .required('Confirm password is required')
     .oneOf([Yup.ref('password')], 'Passwords must match'),

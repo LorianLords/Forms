@@ -3,7 +3,7 @@ import Select, { PropsValue, SingleValue } from 'react-select';
 import { countryType } from '../../Types/types.ts';
 import CountryFlag from 'react-country-flag';
 import React, { useState } from 'react';
-import { countryList } from '../../Types/consts.ts';
+import { useAppSelector } from '../../store/hooks.ts';
 
 interface SelectCountryProps {
   value: PropsValue<countryType> | undefined;
@@ -13,7 +13,7 @@ interface SelectCountryProps {
 
 const SelectCountry = ({ value, onChange, onBlur }: SelectCountryProps) => {
   const [inputValue, setInputValue] = useState(''); // Состояние для inputValue
-
+  const { countries } = useAppSelector((state) => state.forms);
   const onInputChange = (newValue: string) => {
     setInputValue(newValue);
   };
@@ -22,7 +22,7 @@ const SelectCountry = ({ value, onChange, onBlur }: SelectCountryProps) => {
       onBlur={onBlur}
       value={value || undefined} // Передаем объект countryType или null, если ничего не выбрано
       onChange={(selectedOption) => onChange(selectedOption)} // Передаем объект в onChange
-      options={countryList}
+      options={countries}
       inputValue={inputValue} // Передаем inputValue
       onInputChange={onInputChange} // Передаем обработчик
       onMenuOpen={() => console.log('menu open')} // Обработчик открытия меню

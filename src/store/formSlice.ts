@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DataTypes, FormTypes } from '../Types/types.ts';
-import { default_image } from '../Types/consts.ts';
+import { countryType, DataTypes, FormTypes } from '../Types/types.ts';
+import { countryList, default_image } from '../Types/consts.ts';
 
 type StateTypes = {
   value: number;
   arrayData: DataTypes[];
   newState: boolean;
+  countries: countryType[];
 };
 
 const initialState: StateTypes = {
@@ -24,6 +25,7 @@ const initialState: StateTypes = {
     },
   ],
   newState: false,
+  countries: countryList,
 };
 
 export const formSlice = createSlice({

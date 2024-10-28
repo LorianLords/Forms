@@ -1,18 +1,26 @@
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
+import { ForwardedRef } from 'react';
 
 interface CheckboxProps {
-  registerReturn: UseFormRegisterReturn;
-  error: FieldError | undefined;
+  registerReturn?: UseFormRegisterReturn;
+  error?: FieldError | undefined;
+  checkRef?: ForwardedRef<HTMLInputElement>;
 }
 
-const CheckboxTerm = ({ registerReturn, error }: CheckboxProps) => {
+const CheckboxTerm = ({ registerReturn, error, checkRef }: CheckboxProps) => {
   return (
     <div className={'mx-2 mb-2 mt-2 items-center space-x-2'}>
       <label
         className={'flex cursor-pointer items-center font-inter text-2xl font-normal text-gray-800'}
         htmlFor="agreeToTerms"
       >
-        <input type="checkbox" id={'agreeToTerms'} className={'peer hidden'} {...registerReturn} />
+        <input
+          type="checkbox"
+          id={'agreeToTerms'}
+          className={'peer hidden'}
+          ref={checkRef}
+          {...registerReturn}
+        />
         <div
           className={
             'ml-6 mr-3 h-5 w-5 cursor-pointer rounded border-2 border-gray-300 bg-white peer-checked:border-transparent' +

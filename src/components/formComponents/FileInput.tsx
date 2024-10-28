@@ -29,7 +29,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ value, onChang
       >
         <FiUpload className="mb-2 text-3xl text-gray-500" />
         {value && value.length > 0 ? (
-          <span className="text-gray-700">{value[0].name}</span>
+          <span className="text-lg text-gray-700">{value[0].name}</span>
         ) : (
           <>
             <span className="text-gray-700">Click to upload photo</span>

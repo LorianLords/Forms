@@ -10,6 +10,17 @@ export type FormTypes = {
   country: countryType;
 };
 
+export type unFormTypes = {
+  name: string | undefined;
+  age: number | undefined;
+  email: string | undefined;
+  password: string | undefined;
+  confirmPassword: string | undefined;
+  sex: 'male' | 'female' | 'other' | undefined;
+  agreeToTerms: boolean | undefined;
+  picture?: File | undefined;
+  country: countryType | undefined;
+};
 export type DataTypes = {
   name: string;
   age: number;
