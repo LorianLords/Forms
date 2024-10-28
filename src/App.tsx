@@ -6,7 +6,7 @@ import Navigation from './components/Navigation.tsx';
 
 function App() {
   return (
-    <div>
+    <div className="h-full w-full bg-orange-300">
       <Navigation />
       <Outlet />
     </div>

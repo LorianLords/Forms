@@ -1,10 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-    './src/components/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', './src/components/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -14,6 +10,13 @@ export default {
         lato: ['Lato', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
+      },
+      borderWidth: {
+        6: '6px', // Добавляем новую ширину границы
+      },
+      colors: {
+        // Добавьте свой кастомный цвет здесь
+        'custom-green': '#c8ff3c', // Замените на ваш желаемый цвет
       },
     },
   },

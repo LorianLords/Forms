@@ -1,16 +1,18 @@
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useAppDispatch, useAppSelector } from '../store/hooks.ts';
-import { countryType, FormData } from '../Types/types.ts';
-import { setData } from '../store/formSlice.ts';
-import { FiUpload } from 'react-icons/fi';
+import { useAppDispatch } from '../store/hooks.ts';
+import { DataTypes, FormTypes } from '../Types/types.ts';
+import { setData, setNewState } from '../store/formSlice.ts';
+
 import InputField from '../components/formComponents/InputField.tsx';
 import PasswordField from '../components/formComponents/PasswordField.tsx';
 import SelectCountry from '../components/formComponents/SelectCountry.tsx';
 import GenderRadio from '../components/formComponents/GenderRadio.tsx';
 import FileInput from '../components/formComponents/FileInput.tsx';
 import CheckboxTerm from '../components/formComponents/CheckboxTerm.tsx';
+import { useNavigate } from 'react-router-dom';
+import { string } from 'yup';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required').min(3, 'Name must be at least 3 characters long'),
@@ -23,14 +25,14 @@ const validationSchema = Yup.object().shape({
     .required('Age is required'),
   email: Yup.string().email('Enter email address').required('Email is required'),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters long')
-    .required('Password is required')
-    .test('hasNumber', 'Password must contain at least 1 number', (value) => /[0-9]/.test(value))
+    .min(1, 'Password must be at least 6 characters long')
+    .required('Password is required'),
+  /* .test('hasNumber', 'Password must contain at least 1 number', (value) => /[0-9]/.test(value))
     .test('hasUpperCase', 'Password must contain at least 1 capital letter', (value) => /[A-Z]/.test(value))
     .test('hasLowerCase', 'Password must contain at least 1 lowercase letter', (value) => /[a-z]/.test(value))
     .test('hasSpecialChar', 'Password must contain at least 1 special Char', (value) =>
       /[@$!%*?&#]/.test(value),
-    ),
+    ),*/
   confirmPassword: Yup.string()
     .required('Confirm password is required')
     .oneOf([Yup.ref('password')], 'Passwords must match'),
@@ -75,7 +77,7 @@ const ConForm = () => {
     handleSubmit,
     control,
     formState: { errors, isValid },
-  } = useForm<FormData>({
+  } = useForm<FormTypes>({
     resolver: yupResolver(validationSchema),
     mode: 'onChange',
     defaultValues: {
@@ -83,16 +85,38 @@ const ConForm = () => {
     },
   });
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormTypes) => {
     console.log('End');
     console.log(data);
-    dispatch(setData(data));
-    alert(`Submitted data: ${data.name}`);
+    dispatch(setNewState(true));
+    const base64String = await pictureToBase64(data.picture as FileList);
+    console.log('Base64', base64String);
+    const updateData: DataTypes = {
+      ...data,
+      picture: base64String as string,
+    };
+    dispatch(setData(updateData));
+    navigate('/');
   };
 
   const password = watch('password'); // Следим за полем password
 
+  const pictureToBase64 = (file: FileList) => {
+    if (file && file.length > 0) {
+      try {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file[0]);
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (error) => reject(error);
+        });
+      } catch (error) {
+        console.error('Ошибка при конвертации файла в Base64:', error);
+      }
+    }
+  };
   return (
     <div
       className={
@@ -161,7 +185,7 @@ const ConForm = () => {
             control={control}
             render={({ field }) => (
               <FileInput
-                value={field.value} // Текущее значение файла
+                value={field.value as FileList} // Текущее значение файла
                 onChange={field.onChange} // Обработчик изменения файла
                 onBlur={field.onBlur} // Обработчик потери фокуса
                 ref={field.ref} // Ссылка на элемент
@@ -178,7 +202,7 @@ const ConForm = () => {
         <button
           className={`rounded-lg px-4 py-4 font-bold focus:outline-none focus:ring-2 ${
             !Object.keys(errors).length
-              ? 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500'
+              ? 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-blue-500'
               : 'cursor-not-allowed bg-gray-400 text-gray-300'
           }`}
           type="submit"

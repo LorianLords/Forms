@@ -22,4 +22,18 @@
   .error{
     @apply text-red-500 text-sm mt-1 font-medium
   }
+
+  .text{
+    @apply mb-1 text-gray-800
+  }
+
+  .cardNew{
+    @apply  m-4 flex h-auto w-80 flex-col items-center  transition-transform duration-300  border-gray-200 rounded-xl bg-gradient-to-b from-green-400 via-green-400 to-pink-200 p-4 text-lg font-medium shadow-lg hover:scale-105 hover:shadow-2xl
+  }
+  .card{
+    @apply m-4 flex h-auto w-80 flex-col items-center border border-gray-200 rounded-xl bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 p-4 text-lg font-medium shadow-lg transition-transform duration-300 hover:scale-105 hover:shadow-2xl
+  }
+  #root{
+    @apply w-full h-full p-0 flex items-center justify-center
+  }
 }

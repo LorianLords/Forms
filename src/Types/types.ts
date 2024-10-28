@@ -1,4 +1,4 @@
-export type FormData = {
+export type FormTypes = {
   name: string;
   age: number;
   email: string;
@@ -7,6 +7,18 @@ export type FormData = {
   sex: 'male' | 'female' | 'other';
   agreeToTerms: boolean;
   picture?: FileList;
+  country: countryType;
+};
+
+export type DataTypes = {
+  name: string;
+  age: number;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  sex: 'male' | 'female' | 'other';
+  agreeToTerms: boolean;
+  picture?: string;
   country: countryType;
 };
 
