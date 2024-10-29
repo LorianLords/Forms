@@ -26,30 +26,35 @@ const Card = ({ data, id }: CardProps) => {
 
   return (
     <div
-      className={`group relative m-4 h-[420px] w-[320px] rounded-xl bg-gradient-to-tl from-purple-300 via-blue-200 to-pink-300 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:duration-300 ${
+      className={`group relative m-4 h-[200px] w-[140px] rounded-xl bg-gradient-to-tl from-purple-300 via-blue-200 to-pink-300 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:duration-300 sm:h-[280px] sm:w-[200px] md:h-[320px] md:w-[230px] ${
         newCard ? 'scale-105 duration-1000' : 'scale-100'
       }`}
     >
       <div
-        className={`bg-custom-green absolute inset-0 z-10 rounded-xl transition-opacity duration-1000 ease-in-out ${
+        className={`absolute inset-0 z-10 rounded-xl bg-custom-green transition-opacity duration-1000 ease-in-out ${
           newCard ? 'opacity-40' : 'opacity-0'
         }`}
       ></div>
 
-      <div className={'relative z-20 flex h-full w-[320px] flex-col items-center p-4 text-xl font-medium'}>
+      <div
+        className={'relative z-20 flex h-full w-full flex-col items-center p-0.5 text-sm font-medium sm:p-3'}
+      >
         <img
-          className={'mb-4 h-52 w-52 rounded-full border-6 border-orange-500 object-cover shadow-md'}
+          className={
+            'm-1 h-20 w-20 rounded-full border-4 border-orange-500 object-cover shadow-md sm:h-32 sm:w-32 sm:border-6 md:mb-4'
+          }
           src={data.picture || default_image}
           alt=""
         />
-        <div className={'text-center'}>
-          <p className={'mb-1 text-3xl font-bold text-gray-900'}>{data.name}</p>
+        <div className={'mb-2 text-center'}>
+          <h1 className={'text-lg font-bold text-gray-900 md:mb-1 md:text-3xl'}>{data.name}</h1>
+          <p className={'text-sm leading-none text-gray-600 sm:mb-1 sm:text-lg'}>
+            {data.age} years old, {data.sex}
+          </p>
         </div>
-        <p className={'text-md mb-1 text-gray-600'}>
-          {data.age} years old, {data.sex}
-        </p>
-        <div className={'mt-5 w-full pl-3 text-start'}>
-          <p className={'text-md mb-1 text-gray-600'}>{data.email}</p>
+
+        <div className={'w-full pl-3 text-start text-[12px] sm:mt-3 sm:text-sm'}>
+          <p className={'text-md text-gray-600 md:mb-1'}>{data.email}</p>
           <div className={'flex items-center'}>
             <CountryFlag
               className={''}

@@ -52,7 +52,7 @@ const PasswordField = ({
         className={'input mt-2'}
         placeholder={'Confirm Password'}
       />
-      <div className={'flex min-h-[50px] flex-col items-start'}>
+      <div className={'flex min-h-[26px] flex-col items-start'}>
         {errorPassword && <span className={'error'}>{errorPassword.message}</span>}
 
         {errorConfirmPass && <span className={'error'}>{errorConfirmPass.message}</span>}

@@ -9,9 +9,11 @@ interface CheckboxProps {
 
 const CheckboxTerm = ({ registerReturn, error, checkRef }: CheckboxProps) => {
   return (
-    <div className={'mx-2 mb-2 mt-2 items-center space-x-2'}>
+    <div className={'mt-2 items-center space-x-2 md:mx-2 md:mb-2'}>
       <label
-        className={'flex cursor-pointer items-center font-inter text-2xl font-normal text-gray-800'}
+        className={
+          'flex cursor-pointer items-center font-inter text-[10px] font-normal text-gray-800 md:text-base'
+        }
         htmlFor="agreeToTerms"
       >
         <input
@@ -40,7 +42,7 @@ const CheckboxTerm = ({ registerReturn, error, checkRef }: CheckboxProps) => {
         </div>
         I agree to the Terms and Conditions
       </label>
-      <div className={'flex min-h-[24px] items-center justify-center text-base'}>
+      <div className={'flex min-h-[15px] items-center justify-center text-base'}>
         {error && <span className={'error'}>{error.message}</span>}
       </div>
     </div>

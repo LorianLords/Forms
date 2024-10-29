@@ -36,7 +36,7 @@ const InputField = ({
         min={min}
         max={max}
       />
-      <div className={'min-h-[32px]'}>
+      <div className={'flex min-h-[14px] flex-col items-start'}>
         {error && <span className={'error'}>{error.message}</span>}
       </div>
     </div>

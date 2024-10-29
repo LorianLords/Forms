@@ -120,10 +120,11 @@ const ConForm = () => {
   return (
     <div
       className={
-        'mx-auto mb-4 w-[600px] rounded-lg border border-gray-200 p-10 px-14 font-roboto text-2xl shadow-2xl sm:bg-red-300 md:bg-blue-300 lg:bg-white'
+        'mx-auto mb-2 w-3/4 rounded-lg border border-gray-200 bg-gray-200 px-3 py-2 font-roboto shadow-2xl sm:px-5 sm:py-5 md:bg-blue-200 lg:bg-white' +
+        ' xs:p-5 xs:w-[370px] md:h-auto md:text-xl'
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className={'flex flex-col items-center'}>
         <InputField
           label={'Name*'}
           fieldId={'name'}
@@ -159,8 +160,8 @@ const ConForm = () => {
           registerReturnConf={register('confirmPassword')}
         />
 
-        <div className={'flex flex-col'}>
-          <label className={'inputLabel mx-3 text-left'} htmlFor="country">
+        <div className={'flex w-full flex-col items-start px-3 md:text-xl'}>
+          <label className={'inputLabel'} htmlFor="country">
             Select Country*
           </label>
           <Controller
@@ -168,18 +169,22 @@ const ConForm = () => {
             control={control}
             render={({ field }) => <SelectCountry {...field} />}
           />
-          <div className={'flex items-start pl-5'}>
+          <div className={'flex items-start pl-1'}>
             {errors.country && <span className={'error'}>{errors.country.message}</span>}
           </div>
         </div>
 
-        <div className={'m-4 my-3 flex flex-col items-start space-y-2'}>
+        <div
+          className={
+            'xs:text-sm m-4 my-3 mb-0 flex w-full flex-col items-start space-y-1 px-1 text-[10px] sm:text-sm md:px-3 md:text-base'
+          }
+        >
           <GenderRadio id={'male'} value={'Male'} registerReturn={register('sex', { required: true })} />
           <GenderRadio id={'female'} value={'Female'} registerReturn={register('sex')} />
           <GenderRadio id={'other'} value={'Other'} registerReturn={register('sex')} />
         </div>
 
-        <div className={'inputBlock items-center'}>
+        <div className={'flex w-full flex-col items-center md:mt-1'}>
           <Controller
             name={'picture'}
             control={control}
@@ -192,7 +197,7 @@ const ConForm = () => {
               />
             )}
           />
-          <div className={'min-h-[24px]'}>
+          <div className={'min-h-[13px]'}>
             {errors.picture && <span className={'error'}>{errors.picture.message}</span>}
           </div>
         </div>
@@ -200,7 +205,7 @@ const ConForm = () => {
         <CheckboxTerm registerReturn={register('agreeToTerms')} error={errors.agreeToTerms} />
 
         <button
-          className={`rounded-lg px-4 py-4 font-bold focus:outline-none focus:ring-2 ${
+          className={`w-1/2 rounded-lg p-2 text-[10px] font-bold focus:outline-none focus:ring-2 sm:text-sm ${
             !Object.keys(errors).length
               ? 'bg-orange-500 text-white hover:bg-orange-600 focus:ring-blue-500'
               : 'cursor-not-allowed bg-gray-400 text-gray-300'

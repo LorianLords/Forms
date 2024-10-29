@@ -25,11 +25,11 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ value, onChang
       />
       <label
         htmlFor="picture"
-        className="flex h-32 w-64 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-center hover:border-blue-500 focus:border-blue-500"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 text-center text-[10px] hover:border-blue-500 focus:border-blue-500 md:h-24 md:w-48 md:text-base"
       >
         <FiUpload className="mb-2 text-3xl text-gray-500" />
         {value && value.length > 0 ? (
-          <span className="text-lg text-gray-700">{value[0].name}</span>
+          <span className="text-sm text-gray-700">{value[0].name}</span>
         ) : (
           <>
             <span className="text-gray-700">Click to upload photo</span>

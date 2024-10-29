@@ -7,7 +7,7 @@ const Home = () => {
   const { arrayData } = useAppSelector((state) => state.forms);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex h-full w-full flex-row items-start overflow-hidden sm:px-4 lg:px-8">
       {arrayData && arrayData.map((item, index) => <Card data={item} key={index} id={index} />)}
     </div>
   );

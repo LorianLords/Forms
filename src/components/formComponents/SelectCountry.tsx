@@ -35,7 +35,7 @@ const SelectCountry = ({ value, onChange, onBlur }: SelectCountryProps) => {
       )}
       placeholder={'Select Country...'}
       classNamePrefix={'react-select'}
-      className={'m-1 mb-0 pl-3 pr-1'}
+      className={'w-full pr-1 text-[10px] sm:m-1 sm:text-base'}
       isClearable
     />
   );
