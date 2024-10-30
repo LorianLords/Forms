@@ -13,61 +13,8 @@ import FileInput from '../components/formComponents/FileInput.tsx';
 import CheckboxTerm from '../components/formComponents/CheckboxTerm.tsx';
 import { useNavigate } from 'react-router-dom';
 import { string } from 'yup';
-
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required').min(3, 'Name must be at least 3 characters long'),
-  age: Yup.number()
-    .transform((value, originalValue) => {
-      return originalValue.trim() === '' ? null : value;
-    })
-    .min(5)
-    .max(120)
-    .required('Age is required'),
-  email: Yup.string().email('Enter email address').required('Email is required'),
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters long')
-    .required('Password is required')
-    .test('hasNumber', 'Password must contain at least 1 number', (value) => /[0-9]/.test(value))
-    .test('hasUpperCase', 'Password must contain at least 1 capital letter', (value) => /[A-Z]/.test(value))
-    .test('hasLowerCase', 'Password must contain at least 1 lowercase letter', (value) => /[a-z]/.test(value))
-    .test('hasSpecialChar', 'Password must contain at least 1 special Char', (value) =>
-      /[@$!%*?&#]/.test(value),
-    ),
-  confirmPassword: Yup.string()
-    .required('Confirm password is required')
-    .oneOf([Yup.ref('password')], 'Passwords must match'),
-  sex: Yup.string()
-    .oneOf(['male', 'female', 'other'] as const)
-    .defined(),
-  agreeToTerms: Yup.bool()
-    .oneOf([true], 'You must accept the terms and conditions')
-    .required('You must agree to the terms'),
-  picture: Yup.mixed<FileList>()
-    .test('FileSize', 'The file is too large', (value) => {
-      console.log(value as FileList);
-      if (value) {
-        const files = value as FileList;
-        return files && files.length > 0 && files[0].size <= 2 * 1024 * 1024; // Ограничение на размер файла 5MB
-      }
-      return true;
-    })
-    .test('FileType', 'File must be Jpeg or PNG format', (value) => {
-      console.log(value as FileList);
-      if (value) {
-        const files = value as FileList;
-        return files && files.length > 0 && ['image/jpeg', 'image/png'].includes(files[0].type);
-      }
-      return true;
-    }),
-  country: Yup.object()
-    .shape({
-      value: Yup.string().required(),
-      label: Yup.string().required(),
-      code: Yup.string().required(),
-    })
-    .nullable()
-    .required('Country is required'),
-});
+import { validationSchema } from '../Types/YupSchema.ts';
+import { pictureToBase64 } from '../Types/FileIntoBase64.ts';
 
 const ConForm = () => {
   const {
@@ -103,25 +50,11 @@ const ConForm = () => {
 
   const password = watch('password'); // Следим за полем password
 
-  const pictureToBase64 = (file: FileList) => {
-    if (file && file.length > 0) {
-      try {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file[0]);
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = (error) => reject(error);
-        });
-      } catch (error) {
-        console.error('Ошибка при конвертации файла в Base64:', error);
-      }
-    }
-  };
   return (
     <div
       className={
-        'mx-auto mb-2 w-3/4 rounded-lg border border-gray-200 bg-gray-200 px-3 py-2 font-roboto shadow-2xl sm:px-5 sm:py-5 md:bg-blue-200 lg:bg-white' +
-        ' xs:p-5 xs:w-[370px] md:h-auto md:text-xl'
+        'mx-auto mb-2 w-3/4 rounded-lg border border-gray-200 bg-gray-200 px-3 py-2 font-roboto shadow-2xl sm:bg-blue-200 sm:px-5 sm:py-5 lg:bg-white' +
+        ' xs:w-[370px] xs:p-5 md:h-auto md:text-xl'
       }
     >
       <form onSubmit={handleSubmit(onSubmit)} className={'flex flex-col items-center'}>
@@ -176,7 +109,7 @@ const ConForm = () => {
 
         <div
           className={
-            'xs:text-sm m-4 my-3 mb-0 flex w-full flex-col items-start space-y-1 px-1 text-[10px] sm:text-sm md:px-3 md:text-base'
+            'm-4 my-3 mb-0 flex w-full flex-col items-start space-y-1 px-1 text-[10px] xs:text-sm sm:text-sm md:px-3 md:text-base'
           }
         >
           <GenderRadio id={'male'} value={'Male'} registerReturn={register('sex', { required: true })} />

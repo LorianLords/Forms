@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Navigation = () => {
   return (
@@ -8,19 +8,19 @@ const Navigation = () => {
       }
     >
       <div className="flex justify-end sm:flex-1">
-        <Link className={'link'} to={'/'}>
+        <NavLink className={({ isActive }) => (isActive ? 'active' : 'link')} to={'/'}>
           Sweet Home
-        </Link>
+        </NavLink>
       </div>
       <div className="flex justify-center text-center sm:flex-1">
-        <Link className={'link'} to={'/uncontrolledform'}>
+        <NavLink className={({ isActive }) => (isActive ? 'active' : 'link')} to={'/uncontrolledform'}>
           Uncontrolled Form
-        </Link>
+        </NavLink>
       </div>
       <div className="flex justify-start sm:flex-1">
-        <Link className={'link'} to={'/form'}>
+        <NavLink className={({ isActive }) => (isActive ? 'active' : 'link')} to={'/form'}>
           Controlled Form
-        </Link>
+        </NavLink>
       </div>
     </div>
   );

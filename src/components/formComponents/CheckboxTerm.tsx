@@ -3,7 +3,7 @@ import { ForwardedRef } from 'react';
 
 interface CheckboxProps {
   registerReturn?: UseFormRegisterReturn;
-  error?: FieldError | undefined;
+  error?: FieldError | undefined | string;
   checkRef?: ForwardedRef<HTMLInputElement>;
 }
 
@@ -43,7 +43,9 @@ const CheckboxTerm = ({ registerReturn, error, checkRef }: CheckboxProps) => {
         I agree to the Terms and Conditions
       </label>
       <div className={'flex min-h-[15px] items-center justify-center text-base'}>
-        {error && <span className={'error'}>{error.message}</span>}
+        {error && (
+          <span className={'error'}>{typeof error !== 'string' ? error.message : (error as string)}</span>
+        )}
       </div>
     </div>
   );

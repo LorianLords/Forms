@@ -11,6 +11,10 @@
     @apply  text-[10px] xs:text-sm sm:text-base md:text-xl lg:text-2xl  text-orange-500 no-underline hover:underline hover:text-red-500 sm:px-4 sm:py-2 font-semibold font-inter;
   }
 
+  .active{
+    @apply  text-[10px] xs:text-sm sm:text-base md:text-xl lg:text-2xl underline text-red-500 sm:px-4 sm:py-2 font-semibold font-inter hover:text-red-700;
+
+  }
   .inputBlock {
     @apply flex flex-col items-start px-1 mb-0 md:px-3 w-full;
   }

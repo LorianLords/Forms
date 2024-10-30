@@ -33,7 +33,7 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ value, onChang
         ) : (
           <>
             <span className="text-gray-700">Click to upload photo</span>
-            <span className="text-sm text-gray-500">JPEG or PNG, max 2MB</span>
+            <span className="text-gray-500">JPEG or PNG, max 2MB</span>
           </>
         )}
       </label>
