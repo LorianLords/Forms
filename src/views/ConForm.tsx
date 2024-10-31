@@ -40,9 +40,11 @@ const ConForm = () => {
     dispatch(setNewState(true));
     const base64String = await pictureToBase64(data.picture as FileList);
     console.log('Base64', base64String);
+    const countryFull = data.country || { value: 'BR', label: 'Brazil', code: 'BR' };
     const updateData: DataTypes = {
       ...data,
       picture: base64String as string,
+      country: countryFull,
     };
     dispatch(setData(updateData));
     navigate('/');

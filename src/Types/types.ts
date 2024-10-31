@@ -30,7 +30,7 @@ export type DataTypes = {
   sex: 'male' | 'female' | 'other';
   agreeToTerms: boolean;
   picture?: string;
-  country: countryType | null;
+  country: countryType;
 };
 
 export interface countryType {

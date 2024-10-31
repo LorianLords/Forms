@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { countryType, DataTypes, FormTypes } from '../Types/types.ts';
-import { countryList, default_image, default_image2 } from '../Types/consts.ts';
+import { countryList, default_image, default_image2, default_image3 } from '../Types/consts.ts';
 
 type StateTypes = {
   value: number;
@@ -32,7 +32,7 @@ const initialState: StateTypes = {
       password: 'aqwwe1!sqQ',
       confirmPassword: 'aqwwe1!sqQ',
       email: 'kelom2@gmail.com',
-      picture: default_image,
+      picture: default_image3,
     },
     {
       name: 'Meggy Shmidt',
