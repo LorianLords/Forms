@@ -37,23 +37,25 @@ const Card = ({ data, id }: CardProps) => {
       ></div>
 
       <div
-        className={'relative z-20 flex h-full w-full flex-col items-center p-0.5 text-sm font-medium sm:p-3'}
+        className={
+          'relative z-20 flex h-full w-full flex-col items-center justify-between p-0.5 text-sm font-medium sm:p-3'
+        }
       >
-        <img
-          className={
-            'm-1 h-20 w-20 rounded-full border-4 border-orange-500 object-cover shadow-md sm:h-32 sm:w-32 sm:border-6 md:mb-4'
-          }
-          src={data.picture || default_image}
-          alt=""
-        />
-        <div className={'mb-2 text-center'}>
-          <h1 className={'text-lg font-bold text-gray-900 md:mb-1 md:text-3xl'}>{data.name}</h1>
-          <p className={'text-sm leading-none text-gray-600 sm:mb-1 sm:text-lg'}>
+        <div className={'flex flex-col items-center text-center'}>
+          <img
+            className={
+              'm-1 h-20 w-20 rounded-full border-4 border-orange-500 object-cover shadow-md sm:h-32 sm:w-32 sm:border-6 md:mb-4'
+            }
+            src={data.picture || default_image}
+            alt=""
+          />
+          <h1 className={'text-lg font-bold text-gray-900 md:mb-1 md:text-2xl lg:text-3xl'}>{data.name}</h1>
+          <p className={'text-sm leading-none text-gray-600 sm:mb-1 lg:text-lg'}>
             {data.age} years old, {data.sex}
           </p>
         </div>
 
-        <div className={'w-full pl-3 text-start text-[12px] sm:mt-3 sm:text-sm'}>
+        <div className={'w-full pl-3 text-start text-[12px] sm:mt-1 sm:text-sm'}>
           <p className={'text-md text-gray-600 md:mb-1'}>{data.email}</p>
           <div className={'flex items-center'}>
             <CountryFlag
